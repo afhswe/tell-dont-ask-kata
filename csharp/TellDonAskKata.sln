@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TellDontAskKata.Service", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TellDontAskKata.UseCase", "TellDontAskKata.UseCase\TellDontAskKata.UseCase.csproj", "{DAD25E7D-578E-46E2-A7A7-B689706488A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TellDontAskKata.Test.Doubles", "TellDontAskKata.Test.Doubles\TellDontAskKata.Test.Doubles.csproj", "{F2279639-B538-4A5D-B03C-55420570C9C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{DAD25E7D-578E-46E2-A7A7-B689706488A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAD25E7D-578E-46E2-A7A7-B689706488A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAD25E7D-578E-46E2-A7A7-B689706488A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2279639-B538-4A5D-B03C-55420570C9C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2279639-B538-4A5D-B03C-55420570C9C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2279639-B538-4A5D-B03C-55420570C9C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2279639-B538-4A5D-B03C-55420570C9C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

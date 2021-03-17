@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TellDontAsk.Repository\TellDontAskKata.Repository.csproj" />
+    <ProjectReference Include="..\TellDontAskKata.Service\TellDontAskKata.Service.csproj" />
+    <ProjectReference Include="..\TellDontAskKata\TellDontAskKata.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
