@@ -6,32 +6,32 @@
         private decimal price;
         private Category category;
 
-        public string getName()
+        public string GetName()
         {
             return name;
         }
 
-        public void setName(string name)
+        public void SetName(string name)
         {
             this.name = name;
         }
 
-        public decimal getPrice()
+        public decimal GetPrice()
         {
             return price;
         }
 
-        public void setPrice(decimal price)
+        public void SetPrice(decimal price)
         {
             this.price = price;
         }
 
-        public Category getCategory()
+        public Category GetCategory()
         {
             return category;
         }
 
-        public void setCategory(Category category)
+        public void SetCategory(Category category)
         {
             this.category = category;
         }

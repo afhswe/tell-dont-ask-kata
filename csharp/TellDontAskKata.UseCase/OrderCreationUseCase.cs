@@ -17,18 +17,18 @@ namespace TellDontAskKata.UseCase
             this.productCatalog = productCatalog;
         }
 
-        public void run(SellItemsRequest request)
+        public void Run(SellItemsRequest request)
         {
             Order order = new Order();
-            order.setStatus(OrderStatus.CREATED);
-            order.setItems(new List<OrderItem>());
+            order.SetStatus(OrderStatus.Created);
+            order.SetItems(new List<OrderItem>());
             order.setCurrency("EUR");
-            order.setTotal((decimal)0.0);
-            order.setTax((decimal)0.0);
+            order.SetTotal((decimal)0.0);
+            order.SetTax((decimal)0.0);
 
-            foreach (SellItemRequest itemRequest in request.getRequests())
+            foreach (SellItemRequest itemRequest in request.GetRequests())
             {
-                Product product = productCatalog.getByName(itemRequest.getProductName());
+                Product product = productCatalog.GetByName(itemRequest.GetProductName());
 
                 if (product == null)
                 {
@@ -36,24 +36,24 @@ namespace TellDontAskKata.UseCase
                 }
                 else
                 {
-                    decimal unitaryTax = Math.Round((product.getPrice() / 100) * (product.getCategory().getTaxPercentage()), 2, MidpointRounding.AwayFromZero);
-                    decimal unitaryTaxedAmount = Math.Round(product.getPrice() + unitaryTax, 2, MidpointRounding.AwayFromZero);
-                    decimal taxedAmount = Math.Round(unitaryTaxedAmount * itemRequest.getQuantity(), 2, MidpointRounding.AwayFromZero);
-                    decimal taxAmount = Math.Round(unitaryTax * itemRequest.getQuantity(), 2, MidpointRounding.AwayFromZero);
+                    decimal unitaryTax = Math.Round((product.GetPrice() / 100) * (product.GetCategory().GetTaxPercentage()), 2, MidpointRounding.AwayFromZero);
+                    decimal unitaryTaxedAmount = Math.Round(product.GetPrice() + unitaryTax, 2, MidpointRounding.AwayFromZero);
+                    decimal taxedAmount = Math.Round(unitaryTaxedAmount * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);
+                    decimal taxAmount = Math.Round(unitaryTax * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);
 
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setProduct(product);
-                    orderItem.setQuantity(itemRequest.getQuantity());
-                    orderItem.setTax(taxAmount);
-                    orderItem.setTaxedAmount(taxedAmount);
-                    order.getItems().Add(orderItem);
+                    orderItem.SetProduct(product);
+                    orderItem.SetQuantity(itemRequest.GetQuantity());
+                    orderItem.SetTax(taxAmount);
+                    orderItem.SetTaxedAmount(taxedAmount);
+                    order.GettItems().Add(orderItem);
 
-                    order.setTotal(order.getTotal() + taxedAmount);
-                    order.setTax(order.getTax() + taxAmount);
+                    order.SetTotal(order.GetTotal() + taxedAmount);
+                    order.SetTax(order.GetTax() + taxAmount);
                 }
             }
 
-            orderRepository.save(order);
+            orderRepository.Save(order);
         }
     }
 }

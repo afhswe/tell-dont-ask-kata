@@ -17,21 +17,21 @@ namespace TellDonAskKataTest
         public OrderCreationUseCaseTest()
         {
             food = new Category();
-            food.setName("food");
-            food.setTaxPercentage((decimal)10);
+            food.SetName("food");
+            food.SetTaxPercentage((decimal)10);
 
             var products = new List<Product>();
             var salad = new Product();
-            salad.setName("salad");
-            salad.setPrice((decimal)3.56);
-            salad.setCategory(food);
+            salad.SetName("salad");
+            salad.SetPrice((decimal)3.56);
+            salad.SetCategory(food);
 
             products.Add(salad);
 
             var tomato = new Product();
-            tomato.setName("tomato");
-            tomato.setPrice((decimal)4.65);
-            tomato.setCategory(food);
+            tomato.SetName("tomato");
+            tomato.SetPrice((decimal)4.65);
+            tomato.SetCategory(food);
 
             products.Add(tomato);
 
@@ -42,135 +42,50 @@ namespace TellDonAskKataTest
 
 
         [Fact]
-        public void sellMultipleItems()
+        public void SellMultipleItems()
         {
             SellItemRequest saladRequest = new SellItemRequest();
-            saladRequest.setProductName("salad");
-            saladRequest.setQuantity(2);
+            saladRequest.SetProductName("salad");
+            saladRequest.SetQuantity(2);
 
             SellItemRequest tomatoRequest = new SellItemRequest();
-            tomatoRequest.setProductName("tomato");
-            tomatoRequest.setQuantity(3);
+            tomatoRequest.SetProductName("tomato");
+            tomatoRequest.SetQuantity(3);
 
             SellItemsRequest request = new SellItemsRequest();
-            request.setRequests(new List<SellItemRequest>() { saladRequest, tomatoRequest });
+            request.SetRequests(new List<SellItemRequest>() { saladRequest, tomatoRequest });
 
-            useCase.run(request);
+            useCase.Run(request);
 
-            Order insertedOrder = orderRepository.getSavedOrder();
-            insertedOrder.getStatus().Should().Be(OrderStatus.CREATED);
-            insertedOrder.getTotal().Should().Be((decimal)23.20);
-            insertedOrder.getTax().Should().Be((decimal)2.13);
+            Order insertedOrder = orderRepository.GetSavedOrder();
+            insertedOrder.GetStatus().Should().Be(OrderStatus.Created);
+            insertedOrder.GetTotal().Should().Be((decimal)23.20);
+            insertedOrder.GetTax().Should().Be((decimal)2.13);
             insertedOrder.getCurrency().Should().Be("EUR");
-            insertedOrder.getItems().Should().HaveCount(2);
-            insertedOrder.getItems()[0].getProduct().getName().Should().Be("salad");
-            insertedOrder.getItems()[0].getProduct().getPrice().Should().Be((decimal)3.56);
-            insertedOrder.getItems()[0].getQuantity().Should().Be(2);
-            insertedOrder.getItems()[0].getTaxedAmount().Should().Be((decimal)7.84);
-            insertedOrder.getItems()[0].getTax().Should().Be((decimal)0.72);
-            insertedOrder.getItems()[1].getProduct().getName().Should().Be("tomato");
-            insertedOrder.getItems()[1].getProduct().getPrice().Should().Be((decimal)4.65);
-            insertedOrder.getItems()[1].getQuantity().Should().Be(3);
-            insertedOrder.getItems()[1].getTaxedAmount().Should().Be((decimal)15.36);
-            insertedOrder.getItems()[1].getTax().Should().Be((decimal)1.41);
+            insertedOrder.GettItems().Should().HaveCount(2);
+            insertedOrder.GettItems()[0].GetProduct().GetName().Should().Be("salad");
+            insertedOrder.GettItems()[0].GetProduct().GetPrice().Should().Be((decimal)3.56);
+            insertedOrder.GettItems()[0].getQuantity().Should().Be(2);
+            insertedOrder.GettItems()[0].GetTaxedAmount().Should().Be((decimal)7.84);
+            insertedOrder.GettItems()[0].GetTax().Should().Be((decimal)0.72);
+            insertedOrder.GettItems()[1].GetProduct().GetName().Should().Be("tomato");
+            insertedOrder.GettItems()[1].GetProduct().GetPrice().Should().Be((decimal)4.65);
+            insertedOrder.GettItems()[1].getQuantity().Should().Be(3);
+            insertedOrder.GettItems()[1].GetTaxedAmount().Should().Be((decimal)15.36);
+            insertedOrder.GettItems()[1].GetTax().Should().Be((decimal)1.41);
         }
 
         [Fact]
-        public void unknownProduct()
+        public void UnknownProduct()
         {
             SellItemsRequest request = new SellItemsRequest();
-            request.setRequests(new List<SellItemRequest>());
+            request.SetRequests(new List<SellItemRequest>());
             SellItemRequest unknownProductRequest = new SellItemRequest();
-            unknownProductRequest.setProductName("unknown product");
-            request.getRequests().Add(unknownProductRequest);
+            unknownProductRequest.SetProductName("unknown product");
+            request.GetRequests().Add(unknownProductRequest);
 
-            Action act = () => useCase.run(request);
+            Action act = () => useCase.Run(request);
             act.Should().Throw<UnknownProductException>();
-        }
-    }
-
-    public class OrderShipmentUseCaseTest
-    {
-        private readonly TestOrderRepository orderRepository;
-        private readonly TestShipmentService shipmentService;
-        private readonly OrderShipmentUseCase useCase;
-
-        public OrderShipmentUseCaseTest()
-        {
-            orderRepository = new TestOrderRepository();
-            shipmentService = new TestShipmentService();
-            useCase = new OrderShipmentUseCase(orderRepository, shipmentService);
-        }
-
-        [Fact]
-        public void shipApprovedOrder()
-        {
-            Order initialOrder = new Order();
-            initialOrder.setId(1);
-            initialOrder.setStatus(OrderStatus.APPROVED);
-            orderRepository.addOrder(initialOrder);
-
-            OrderShipmentRequest request = new OrderShipmentRequest();
-            request.setOrderId(1);
-
-            useCase.run(request);
-
-            orderRepository.getSavedOrder().getStatus().Should().Be(OrderStatus.SHIPPED);
-            shipmentService.getShippedOrder().Should().Be(initialOrder);
-        }
-
-        [Fact]
-        public void createdOrdersCannotBeShipped()
-        {
-            Order initialOrder = new Order();
-            initialOrder.setId(1);
-            initialOrder.setStatus(OrderStatus.CREATED);
-            orderRepository.addOrder(initialOrder);
-
-            OrderShipmentRequest request = new OrderShipmentRequest();
-            request.setOrderId(1);
-
-            Action act = () => useCase.run(request);
-            act.Should().Throw<OrderCannotBeShippedException>();
-
-            orderRepository.getSavedOrder().Should().BeNull();
-            shipmentService.getShippedOrder().Should().BeNull();
-        }
-
-        [Fact]
-        public void rejectedOrdersCannotBeShipped()
-        {
-            Order initialOrder = new Order();
-            initialOrder.setId(1);
-            initialOrder.setStatus(OrderStatus.REJECTED);
-            orderRepository.addOrder(initialOrder);
-
-            OrderShipmentRequest request = new OrderShipmentRequest();
-            request.setOrderId(1);
-
-            Action act = () => useCase.run(request);
-            act.Should().Throw<OrderCannotBeShippedException>();
-
-            orderRepository.getSavedOrder().Should().BeNull();
-            shipmentService.getShippedOrder().Should().BeNull();
-        }
-
-        [Fact]
-        public void shippedOrdersCannotBeShippedAgain()
-        {
-            Order initialOrder = new Order();
-            initialOrder.setId(1);
-            initialOrder.setStatus(OrderStatus.SHIPPED);
-            orderRepository.addOrder(initialOrder);
-
-            OrderShipmentRequest request = new OrderShipmentRequest();
-            request.setOrderId(1);
-
-            Action act = () => useCase.run(request);
-            act.Should().Throw<OrderCannotBeShippedTwiceException>();
-
-            orderRepository.getSavedOrder().Should().BeNull();
-            shipmentService.getShippedOrder().Should().BeNull();
         }
     }
 }

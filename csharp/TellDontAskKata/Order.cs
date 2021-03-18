@@ -12,12 +12,12 @@ namespace TellDontAskKata.Domain
         private OrderStatus status;
         private int id;
 
-        public decimal getTotal()
+        public decimal GetTotal()
         {
             return total;
         }
 
-        public void setTotal(decimal total)
+        public void SetTotal(decimal total)
         {
             this.total = total;
         }
@@ -32,42 +32,42 @@ namespace TellDontAskKata.Domain
             this.currency = currency;
         }
 
-        public List<OrderItem> getItems()
+        public List<OrderItem> GettItems()
         {
             return items;
         }
 
-        public void setItems(List<OrderItem> items)
+        public void SetItems(List<OrderItem> items)
         {
             this.items = items;
         }
 
-        public decimal getTax()
+        public decimal GetTax()
         {
             return tax;
         }
 
-        public void setTax(decimal tax)
+        public void SetTax(decimal tax)
         {
             this.tax = tax;
         }
 
-        public OrderStatus getStatus()
+        public OrderStatus GetStatus()
         {
             return status;
         }
 
-        public void setStatus(OrderStatus status)
+        public void SetStatus(OrderStatus status)
         {
             this.status = status;
         }
 
-        public int getId()
+        public int GetId()
         {
             return id;
         }
 
-        public void setId(int id)
+        public void SetId(int id)
         {
             this.id = id;
         }

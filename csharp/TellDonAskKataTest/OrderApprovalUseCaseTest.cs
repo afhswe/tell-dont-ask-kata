@@ -19,111 +19,111 @@ namespace TellDonAskKataTest
         }
 
         [Fact]
-        public void approvedExistingOrder()
+        public void ApprovedExistingOrder()
         {
             Order initialOrder = new Order();
-            initialOrder.setStatus(OrderStatus.CREATED);
-            initialOrder.setId(1);
-            orderRepository.addOrder(initialOrder);
+            initialOrder.SetStatus(OrderStatus.Created);
+            initialOrder.SetId(1);
+            orderRepository.AddOrder(initialOrder);
 
             OrderApprovalRequest request = new OrderApprovalRequest();
-            request.setOrderId(1);
-            request.setApproved(true);
+            request.SetOrderId(1);
+            request.SetApproved(true);
 
-            useCase.run(request);
+            useCase.Run(request);
 
-            Order savedOrder = orderRepository.getSavedOrder();
-            savedOrder.getStatus().Should().Be(OrderStatus.APPROVED);
+            Order savedOrder = orderRepository.GetSavedOrder();
+            savedOrder.GetStatus().Should().Be(OrderStatus.Approved);
         }
 
         [Fact]
-        public void rejectedExistingOrder()
+        public void RejectedExistingOrder()
         {
             Order initialOrder = new Order();
-            initialOrder.setStatus(OrderStatus.CREATED);
-            initialOrder.setId(1);
-            orderRepository.addOrder(initialOrder);
+            initialOrder.SetStatus(OrderStatus.Created);
+            initialOrder.SetId(1);
+            orderRepository.AddOrder(initialOrder);
 
             OrderApprovalRequest request = new OrderApprovalRequest();
-            request.setOrderId(1);
-            request.setApproved(false);
+            request.SetOrderId(1);
+            request.SetApproved(false);
 
-            useCase.run(request);
+            useCase.Run(request);
 
-            Order savedOrder = orderRepository.getSavedOrder();
-            savedOrder.getStatus().Should().Be(OrderStatus.REJECTED);
+            Order savedOrder = orderRepository.GetSavedOrder();
+            savedOrder.GetStatus().Should().Be(OrderStatus.Rejected);
         }
 
         [Fact]
-        public void cannotApproveRejectedOrder()
+        public void CannotApproveRejectedOrder()
         {
             Order initialOrder = new Order();
-            initialOrder.setStatus(OrderStatus.REJECTED);
-            initialOrder.setId(1);
-            orderRepository.addOrder(initialOrder);
+            initialOrder.SetStatus(OrderStatus.Rejected);
+            initialOrder.SetId(1);
+            orderRepository.AddOrder(initialOrder);
 
             OrderApprovalRequest request = new OrderApprovalRequest();
-            request.setOrderId(1);
-            request.setApproved(true);
+            request.SetOrderId(1);
+            request.SetApproved(true);
 
-            Action act = () => useCase.run(request);
+            Action act = () => useCase.Run(request);
             act.Should().Throw<RejectedOrderCannotBeApprovedException>();
 
-            orderRepository.getSavedOrder().Should().BeNull();
+            orderRepository.GetSavedOrder().Should().BeNull();
         }
 
         [Fact]
-        public void cannotRejectApprovedOrder()
+        public void CannotRejectApprovedOrder()
         {
             Order initialOrder = new Order();
-            initialOrder.setStatus(OrderStatus.APPROVED);
-            initialOrder.setId(1);
-            orderRepository.addOrder(initialOrder);
+            initialOrder.SetStatus(OrderStatus.Approved);
+            initialOrder.SetId(1);
+            orderRepository.AddOrder(initialOrder);
 
             OrderApprovalRequest request = new OrderApprovalRequest();
-            request.setOrderId(1);
-            request.setApproved(false);
+            request.SetOrderId(1);
+            request.SetApproved(false);
 
-            Action act = () => useCase.run(request);
+            Action act = () => useCase.Run(request);
             act.Should().Throw<ApprovedOrderCannotBeRejectedException>();
 
-            orderRepository.getSavedOrder().Should().BeNull();
+            orderRepository.GetSavedOrder().Should().BeNull();
         }
 
         [Fact]
-        public void shippedOrdersCannotBeApproved()
+        public void ShippedOrdersCannotBeApproved()
         {
             Order initialOrder = new Order();
-            initialOrder.setStatus(OrderStatus.SHIPPED);
-            initialOrder.setId(1);
-            orderRepository.addOrder(initialOrder);
+            initialOrder.SetStatus(OrderStatus.Shipped);
+            initialOrder.SetId(1);
+            orderRepository.AddOrder(initialOrder);
 
             OrderApprovalRequest request = new OrderApprovalRequest();
-            request.setOrderId(1);
-            request.setApproved(true);
+            request.SetOrderId(1);
+            request.SetApproved(true);
 
-            Action act = () => useCase.run(request);
+            Action act = () => useCase.Run(request);
 
             act.Should().Throw<ShippedOrdersCannotBeChangedException>();
-            orderRepository.getSavedOrder().Should().BeNull();
+            orderRepository.GetSavedOrder().Should().BeNull();
         }
 
         [Fact]
-        public void shippedOrdersCannotBeRejected()
+        public void ShippedOrdersCannotBeRejected()
         {
             Order initialOrder = new Order();
-            initialOrder.setStatus(OrderStatus.SHIPPED);
-            initialOrder.setId(1);
-            orderRepository.addOrder(initialOrder);
+            initialOrder.SetStatus(OrderStatus.Shipped);
+            initialOrder.SetId(1);
+            orderRepository.AddOrder(initialOrder);
 
             OrderApprovalRequest request = new OrderApprovalRequest();
-            request.setOrderId(1);
-            request.setApproved(false);
+            request.SetOrderId(1);
+            request.SetApproved(false);
 
-            Action act = () => useCase.run(request);
+            Action act = () => useCase.Run(request);
 
             act.Should().Throw<ShippedOrdersCannotBeChangedException>();
-            orderRepository.getSavedOrder().Should().BeNull();
+            orderRepository.GetSavedOrder().Should().BeNull();
         }
     }
 }

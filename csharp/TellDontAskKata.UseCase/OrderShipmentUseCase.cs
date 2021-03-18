@@ -15,24 +15,24 @@ namespace TellDontAskKata.UseCase
             this.shipmentService = shipmentService;
         }
 
-        public void run(OrderShipmentRequest request)
+        public void Run(OrderShipmentRequest request)
         {
-            Order order = orderRepository.getById(request.getOrderId());
+            Order order = orderRepository.GetById(request.GetOrderId());
 
-            if (order.getStatus().Equals(OrderStatus.CREATED) || order.getStatus().Equals(OrderStatus.REJECTED))
+            if (order.GetStatus().Equals(OrderStatus.Created) || order.GetStatus().Equals(OrderStatus.Rejected))
             {
                 throw new OrderCannotBeShippedException();
             }
 
-            if (order.getStatus().Equals(OrderStatus.SHIPPED))
+            if (order.GetStatus().Equals(OrderStatus.Shipped))
             {
                 throw new OrderCannotBeShippedTwiceException();
             }
 
-            shipmentService.ship(order);
+            shipmentService.Ship(order);
 
-            order.setStatus(OrderStatus.SHIPPED);
-            orderRepository.save(order);
+            order.SetStatus(OrderStatus.Shipped);
+            orderRepository.Save(order);
         }
     }
 }

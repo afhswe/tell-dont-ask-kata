@@ -4,8 +4,8 @@ namespace TellDontAsk.Repository
 {
     public interface IOrderRepository
     {
-        void save(Order order);
-        Order getById(int orderId);
+        void Save(Order order);
+        Order GetById(int orderId);
     }
 
 }

@@ -12,27 +12,27 @@ namespace TellDontAskKata.UseCase
             this.orderRepository = orderRepository;
         }
 
-        public void run(OrderApprovalRequest request)
+        public void Run(OrderApprovalRequest request)
         {
-            Order order = orderRepository.getById(request.getOrderId());
+            Order order = orderRepository.GetById(request.GetOrderId());
 
-            if (order.getStatus().Equals(OrderStatus.SHIPPED))
+            if (order.GetStatus().Equals(OrderStatus.Shipped))
             {
                 throw new ShippedOrdersCannotBeChangedException();
             }
 
-            if (request.isApproved() && order.getStatus().Equals(OrderStatus.REJECTED))
+            if (request.IsApproved() && order.GetStatus().Equals(OrderStatus.Rejected))
             {
                 throw new RejectedOrderCannotBeApprovedException();
             }
 
-            if (!request.isApproved() && order.getStatus().Equals(OrderStatus.APPROVED))
+            if (!request.IsApproved() && order.GetStatus().Equals(OrderStatus.Approved))
             {
                 throw new ApprovedOrderCannotBeRejectedException();
             }
 
-            order.setStatus(request.isApproved() ? OrderStatus.APPROVED : OrderStatus.REJECTED);
-            orderRepository.save(order);
+            order.SetStatus(request.IsApproved() ? OrderStatus.Approved : OrderStatus.Rejected);
+            orderRepository.Save(order);
         }
     }
 }

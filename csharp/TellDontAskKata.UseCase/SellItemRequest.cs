@@ -5,22 +5,22 @@
         private int quantity;
         private string productName;
 
-        public void setQuantity(int quantity)
+        public void SetQuantity(int quantity)
         {
             this.quantity = quantity;
         }
 
-        public void setProductName(string productName)
+        public void SetProductName(string productName)
         {
             this.productName = productName;
         }
 
-        public int getQuantity()
+        public int GetQuantity()
         {
             return quantity;
         }
 
-        public string getProductName()
+        public string GetProductName()
         {
             return productName;
         }

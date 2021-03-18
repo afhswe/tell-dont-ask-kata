@@ -7,12 +7,12 @@
         private decimal taxedAmount;
         private decimal tax;
 
-        public Product getProduct()
+        public Product GetProduct()
         {
             return product;
         }
 
-        public void setProduct(Product product)
+        public void SetProduct(Product product)
         {
             this.product = product;
         }
@@ -22,27 +22,27 @@
             return quantity;
         }
 
-        public void setQuantity(int quantity)
+        public void SetQuantity(int quantity)
         {
             this.quantity = quantity;
         }
 
-        public decimal getTaxedAmount()
+        public decimal GetTaxedAmount()
         {
             return taxedAmount;
         }
 
-        public void setTaxedAmount(decimal taxedAmount)
+        public void SetTaxedAmount(decimal taxedAmount)
         {
             this.taxedAmount = taxedAmount;
         }
 
-        public decimal getTax()
+        public decimal GetTax()
         {
             return tax;
         }
 
-        public void setTax(decimal tax)
+        public void SetTax(decimal tax)
         {
             this.tax = tax;
         }

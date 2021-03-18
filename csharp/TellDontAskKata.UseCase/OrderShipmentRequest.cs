@@ -4,12 +4,12 @@
     {
         private int orderId;
 
-        public void setOrderId(int orderId)
+        public void SetOrderId(int orderId)
         {
             this.orderId = orderId;
         }
 
-        public int getOrderId()
+        public int GetOrderId()
         {
             return orderId;
         }

@@ -2,6 +2,6 @@
 {
     public enum OrderStatus
     {
-        APPROVED, REJECTED, SHIPPED, CREATED
+        Approved, Rejected, Shipped, Created
     }
 }

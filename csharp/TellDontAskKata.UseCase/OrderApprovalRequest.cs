@@ -5,22 +5,22 @@
         private int orderId;
         private bool approved;
 
-        public void setOrderId(int orderId)
+        public void SetOrderId(int orderId)
         {
             this.orderId = orderId;
         }
 
-        public int getOrderId()
+        public int GetOrderId()
         {
             return orderId;
         }
 
-        public void setApproved(bool approved)
+        public void SetApproved(bool approved)
         {
             this.approved = approved;
         }
 
-        public bool isApproved()
+        public bool IsApproved()
         {
             return approved;
         }

@@ -7,22 +7,22 @@ namespace TellDontAskKata.Domain
         private String _name;
         private decimal _taxPercentage;
 
-        public String getName()
+        public String GetName()
         {
             return _name;
         }
 
-        public void setName(String name)
+        public void SetName(String name)
         {
             this._name = name;
         }
 
-        public decimal getTaxPercentage()
+        public decimal GetTaxPercentage()
         {
             return _taxPercentage;
         }
 
-        public void setTaxPercentage(decimal taxPercentage)
+        public void SetTaxPercentage(decimal taxPercentage)
         {
             this._taxPercentage = taxPercentage;
         }

@@ -10,23 +10,22 @@ namespace TellDontAskKata.Test.Doubles
         private Order insertedOrder;
         private List<Order> orders = new List<Order>();
 
-        public Order getSavedOrder()
+        public Order GetSavedOrder()
         {
             return insertedOrder;
         }
 
-        public void save(Order order)
+        public void Save(Order order)
         {
             insertedOrder = order;
         }
 
-        public Order getById(int orderId)
+        public Order GetById(int orderId)
         {
-            return orders.Where(o => o.getId() == orderId).First();
-            //return orders.stream().filter(o->o.getId() == orderId).findFirst().get();
+            return orders.Where(o => o.GetId() == orderId).First();
         }
 
-        public void addOrder(Order order)
+        public void AddOrder(Order order)
         {
             orders.Add(order);
         }

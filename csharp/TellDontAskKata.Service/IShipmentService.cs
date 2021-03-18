@@ -4,6 +4,6 @@ namespace TellDontAskKata.Service
 {
     public interface IShipmentService
     {
-        void ship(Order order);
+        void Ship(Order order);
     }
 }

@@ -14,9 +14,9 @@ namespace TellDontAskKata.Test.Doubles
             this.products = products;
         }
 
-        public Product getByName(string name)
+        public Product GetByName(string name)
         {
-            return products.Where(p => p.getName().Equals(name)).FirstOrDefault();
+            return products.Where(p => p.GetName().Equals(name)).FirstOrDefault();
         }
     }
 }

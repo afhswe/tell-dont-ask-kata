@@ -5,7 +5,7 @@ namespace TellDontAskKata.Repository
 {
     public interface IProductCatalog
     {
-        Product getByName(String name);
+        Product GetByName(String name);
     }
 
 }
