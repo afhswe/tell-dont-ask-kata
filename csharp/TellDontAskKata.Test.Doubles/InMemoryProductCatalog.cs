@@ -17,8 +17,7 @@ namespace TellDontAskKata.Test.Doubles
 
         public Product getByName(string name)
         {
-            return products.Where(p => p.getName().Equals(name)).FirstOrDefault(null);
-            //return products.stream().filter(p->p.getName().equals(name)).findFirst().orElse(null);
+            return products.Where(p => p.getName().Equals(name)).FirstOrDefault();
         }
     }
 }

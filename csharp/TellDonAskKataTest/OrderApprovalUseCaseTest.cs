@@ -4,6 +4,7 @@ using TellDontAskKata.Test.Doubles;
 using TellDontAskKata.UseCase;
 using Xunit;
 using FluentAssertions;
+using TellDontAskKata.Repository;
 
 namespace TellDonAskKataTest
 {
@@ -127,3 +128,4 @@ namespace TellDonAskKataTest
         }
     }
 }
+

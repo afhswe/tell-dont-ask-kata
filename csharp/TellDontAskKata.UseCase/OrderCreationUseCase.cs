@@ -36,9 +36,9 @@ namespace TellDontAskKata.UseCase
                 }
                 else
                 {
-                    decimal unitaryTax = Math.Round(product.getPrice() / (100 * (product.getCategory().getTaxPercentage())), 2, MidpointRounding.AwayFromZero);
+                    decimal unitaryTax = Math.Round((product.getPrice() / 100) * (product.getCategory().getTaxPercentage()), 2, MidpointRounding.AwayFromZero);
                     decimal unitaryTaxedAmount = Math.Round(product.getPrice() + unitaryTax, 2, MidpointRounding.AwayFromZero);
-                    decimal taxedAmount = Math.Round(unitaryTaxedAmount * (itemRequest.getQuantity()), 2, MidpointRounding.AwayFromZero);
+                    decimal taxedAmount = Math.Round(unitaryTaxedAmount * itemRequest.getQuantity(), 2, MidpointRounding.AwayFromZero);
                     decimal taxAmount = Math.Round(unitaryTax * itemRequest.getQuantity(), 2, MidpointRounding.AwayFromZero);
 
                     OrderItem orderItem = new OrderItem();
