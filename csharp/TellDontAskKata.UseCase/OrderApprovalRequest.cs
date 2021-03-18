@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace TellDontAskKata.UseCase
+﻿namespace TellDontAskKata.UseCase
 {
     public class OrderApprovalRequest
     {

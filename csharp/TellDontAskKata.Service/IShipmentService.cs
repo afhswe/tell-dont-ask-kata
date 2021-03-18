@@ -1,5 +1,4 @@
-﻿using System;
-using TellDontAskKata.Domain;
+﻿using TellDontAskKata.Domain;
 
 namespace TellDontAskKata.Service
 {
