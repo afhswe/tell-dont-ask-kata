@@ -30,6 +30,8 @@ public class OrderCreationUseCase {
         order.setTotal(new BigDecimal("0.00"));
         order.setTax(new BigDecimal("0.00"));
 
+        int numberOfFoodItems = 0;
+
         for (SellItemRequest itemRequest : request.getRequests()) {
             Product product = productCatalog.getByName(itemRequest.getProductName());
 
@@ -48,6 +50,16 @@ public class OrderCreationUseCase {
                 orderItem.setTax(taxAmount);
                 orderItem.setTaxedAmount(taxedAmount);
                 order.getItems().add(orderItem);
+
+                for (OrderItem item : order.getItems()) {
+                    if (item.getProduct().getCategory().getName().equals("food")) {
+                        numberOfFoodItems += item.getQuantity();
+                    }
+                }
+
+                if (numberOfFoodItems > 100) {
+                    throw new MaximumNumberOfFoodItemsExceeded();
+                }
 
                 order.setTotal(order.getTotal().add(taxedAmount));
                 order.setTax(order.getTax().add(taxAmount));

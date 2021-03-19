@@ -85,4 +85,37 @@ public class OrderCreationUseCaseTest {
 
         useCase.run(request);
     }
+
+    @Test(expected = MaximumNumberOfFoodItemsExceeded.class)
+    public void maximumNumberOfFoodItemsExceededWithSingleQuantity() throws Exception {
+        SellItemsRequest tooManyFoodItemsRequest = new SellItemsRequest();
+        tooManyFoodItemsRequest.setRequests(new ArrayList<>());
+
+        for (int i = 0; i <= 100; i++) {
+            SellItemRequest foodItemRequest = new SellItemRequest();
+            foodItemRequest.setProductName("salad");
+            foodItemRequest.setQuantity(1);
+            tooManyFoodItemsRequest.getRequests().add(foodItemRequest);
+        }
+
+        useCase.run(tooManyFoodItemsRequest);
+    }
+
+    @Test(expected = MaximumNumberOfFoodItemsExceeded.class)
+    public void maximumNumberOfFoodItemsExceededWithMultipleQuantity() throws Exception {
+        SellItemsRequest tooManyFoodItemsRequest = new SellItemsRequest();
+        tooManyFoodItemsRequest.setRequests(new ArrayList<>());
+
+        SellItemRequest foodItemRequest = new SellItemRequest();
+        foodItemRequest.setProductName("salad");
+        foodItemRequest.setQuantity(30);
+        tooManyFoodItemsRequest.getRequests().add(foodItemRequest);
+
+        foodItemRequest = new SellItemRequest();
+        foodItemRequest.setProductName("tomato");
+        foodItemRequest.setQuantity(71);
+        tooManyFoodItemsRequest.getRequests().add(foodItemRequest);
+
+        useCase.run(tooManyFoodItemsRequest);
+    }
 }
