@@ -87,6 +87,44 @@ namespace TellDonAskKataTest
             Action act = () => useCase.Run(request);
             act.Should().Throw<UnknownProductException>();
         }
+
+        [Fact]
+        public void maximumNumberOfFoodItemsExceededWithSingleQuantity()
+        {
+            SellItemsRequest tooManyFoodItemsRequest = new SellItemsRequest();
+            tooManyFoodItemsRequest.SetRequests(new List<SellItemRequest>());
+
+            for (int i = 0; i <= 100; i++)
+            {
+                SellItemRequest foodItemRequest = new SellItemRequest();
+                foodItemRequest.SetProductName("salad");
+                foodItemRequest.SetQuantity(1);
+                tooManyFoodItemsRequest.GetRequests().Add(foodItemRequest);
+            }
+
+            Action act = () => useCase.Run(tooManyFoodItemsRequest);
+            act.Should().Throw<MaximumNumberOfFoodItemsExceeded>();
+        }
+
+        [Fact]
+        public void MaximumNumberOfFoodItemsExceededWithMultipleQuantity()
+        {
+            SellItemsRequest tooManyFoodItemsRequest = new SellItemsRequest();
+            tooManyFoodItemsRequest.SetRequests(new List<SellItemRequest>());
+
+            SellItemRequest foodItemRequest = new SellItemRequest();
+            foodItemRequest.SetProductName("salad");
+            foodItemRequest.SetQuantity(30);
+            tooManyFoodItemsRequest.GetRequests().Add(foodItemRequest);
+
+            foodItemRequest = new SellItemRequest();
+            foodItemRequest.SetProductName("tomato");
+            foodItemRequest.SetQuantity(71);
+            tooManyFoodItemsRequest.GetRequests().Add(foodItemRequest);
+
+            Action act = () => useCase.Run(tooManyFoodItemsRequest);
+            act.Should().Throw<MaximumNumberOfFoodItemsExceeded>();
+        }
     }
 }
 
