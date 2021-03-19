@@ -61,7 +61,7 @@ namespace TellDonAskKataTest
             insertedOrder.GetStatus().Should().Be(OrderStatus.Created);
             insertedOrder.GetTotal().Should().Be((decimal)23.20);
             insertedOrder.GetTax().Should().Be((decimal)2.13);
-            insertedOrder.getCurrency().Should().Be("EUR");
+            insertedOrder.GetCurrency().Should().Be("EUR");
             insertedOrder.GettItems().Should().HaveCount(2);
             insertedOrder.GettItems()[0].GetProduct().GetName().Should().Be("salad");
             insertedOrder.GettItems()[0].GetProduct().GetPrice().Should().Be((decimal)3.56);

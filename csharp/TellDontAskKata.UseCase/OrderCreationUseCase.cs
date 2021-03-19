@@ -22,7 +22,7 @@ namespace TellDontAskKata.UseCase
             Order order = new Order();
             order.SetStatus(OrderStatus.Created);
             order.SetItems(new List<OrderItem>());
-            order.setCurrency("EUR");
+            order.SetCurrency("EUR");
             order.SetTotal((decimal)0.0);
             order.SetTax((decimal)0.0);
 
