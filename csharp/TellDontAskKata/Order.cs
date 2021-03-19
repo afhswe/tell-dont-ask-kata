@@ -32,7 +32,7 @@ namespace TellDontAskKata.Domain
             this.currency = currency;
         }
 
-        public List<OrderItem> GettItems()
+        public List<OrderItem> GetItems()
         {
             return items;
         }

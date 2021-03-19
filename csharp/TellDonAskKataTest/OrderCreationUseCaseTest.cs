@@ -62,17 +62,17 @@ namespace TellDonAskKataTest
             insertedOrder.GetTotal().Should().Be((decimal)23.20);
             insertedOrder.GetTax().Should().Be((decimal)2.13);
             insertedOrder.GetCurrency().Should().Be("EUR");
-            insertedOrder.GettItems().Should().HaveCount(2);
-            insertedOrder.GettItems()[0].GetProduct().GetName().Should().Be("salad");
-            insertedOrder.GettItems()[0].GetProduct().GetPrice().Should().Be((decimal)3.56);
-            insertedOrder.GettItems()[0].getQuantity().Should().Be(2);
-            insertedOrder.GettItems()[0].GetTaxedAmount().Should().Be((decimal)7.84);
-            insertedOrder.GettItems()[0].GetTax().Should().Be((decimal)0.72);
-            insertedOrder.GettItems()[1].GetProduct().GetName().Should().Be("tomato");
-            insertedOrder.GettItems()[1].GetProduct().GetPrice().Should().Be((decimal)4.65);
-            insertedOrder.GettItems()[1].getQuantity().Should().Be(3);
-            insertedOrder.GettItems()[1].GetTaxedAmount().Should().Be((decimal)15.36);
-            insertedOrder.GettItems()[1].GetTax().Should().Be((decimal)1.41);
+            insertedOrder.GetItems().Should().HaveCount(2);
+            insertedOrder.GetItems()[0].GetProduct().GetName().Should().Be("salad");
+            insertedOrder.GetItems()[0].GetProduct().GetPrice().Should().Be((decimal)3.56);
+            insertedOrder.GetItems()[0].getQuantity().Should().Be(2);
+            insertedOrder.GetItems()[0].GetTaxedAmount().Should().Be((decimal)7.84);
+            insertedOrder.GetItems()[0].GetTax().Should().Be((decimal)0.72);
+            insertedOrder.GetItems()[1].GetProduct().GetName().Should().Be("tomato");
+            insertedOrder.GetItems()[1].GetProduct().GetPrice().Should().Be((decimal)4.65);
+            insertedOrder.GetItems()[1].getQuantity().Should().Be(3);
+            insertedOrder.GetItems()[1].GetTaxedAmount().Should().Be((decimal)15.36);
+            insertedOrder.GetItems()[1].GetTax().Should().Be((decimal)1.41);
         }
 
         [Fact]

@@ -46,7 +46,7 @@ namespace TellDontAskKata.UseCase
                     orderItem.SetQuantity(itemRequest.GetQuantity());
                     orderItem.SetTax(taxAmount);
                     orderItem.SetTaxedAmount(taxedAmount);
-                    order.GettItems().Add(orderItem);
+                    order.GetItems().Add(orderItem);
 
                     order.SetTotal(order.GetTotal() + taxedAmount);
                     order.SetTax(order.GetTax() + taxAmount);
