@@ -50,7 +50,7 @@ namespace TellDontAskKata.UseCase
                     orderItem.SetTaxedAmount(taxedAmount);
                     order.GetItems().Add(orderItem);
 
-                    foreach (OrderItem item in order.GettItems())
+                    foreach (OrderItem item in order.GetItems())
                     {
                         if (item.GetProduct().GetCategory().GetName().Equals("food"))
                         {
