@@ -22,7 +22,7 @@ namespace TellDontAskKata.UseCase
             Order order = new Order();
             order.SetStatus(OrderStatus.Created);
             order.SetItems(new List<OrderItem>());
-            order.setCurrency("EUR");
+            order.SetCurrency("EUR");
             order.SetTotal((decimal)0.0);
             order.SetTax((decimal)0.0);
 
@@ -48,7 +48,7 @@ namespace TellDontAskKata.UseCase
                     orderItem.SetQuantity(itemRequest.GetQuantity());
                     orderItem.SetTax(taxAmount);
                     orderItem.SetTaxedAmount(taxedAmount);
-                    order.GettItems().Add(orderItem);
+                    order.GetItems().Add(orderItem);
 
                     foreach (OrderItem item in order.GettItems())
                     {

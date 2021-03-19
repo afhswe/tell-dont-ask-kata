@@ -22,17 +22,17 @@ namespace TellDontAskKata.Domain
             this.total = total;
         }
 
-        public String getCurrency()
+        public String GetCurrency()
         {
             return currency;
         }
 
-        public void setCurrency(String currency)
+        public void SetCurrency(String currency)
         {
             this.currency = currency;
         }
 
-        public List<OrderItem> GettItems()
+        public List<OrderItem> GetItems()
         {
             return items;
         }
