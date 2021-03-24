@@ -26,6 +26,8 @@ namespace TellDontAskKata.UseCase
             order.SetTotal((decimal)0.0);
             order.SetTax((decimal)0.0);
 
+            int numberOfFoodItems = 0;
+
             foreach (SellItemRequest itemRequest in request.GetRequests())
             {
                 Product product = productCatalog.GetByName(itemRequest.GetProductName());
@@ -47,6 +49,19 @@ namespace TellDontAskKata.UseCase
                     orderItem.SetTax(taxAmount);
                     orderItem.SetTaxedAmount(taxedAmount);
                     order.GetItems().Add(orderItem);
+
+                    foreach (OrderItem item in order.GetItems())
+                    {
+                        if (item.GetProduct().GetCategory().GetName().Equals("food"))
+                        {
+                            numberOfFoodItems += item.getQuantity();
+                        }
+                    }
+
+                    if (numberOfFoodItems > 100)
+                    {
+                        throw new MaximumNumberOfFoodItemsExceeded();
+                    }
 
                     order.SetTotal(order.GetTotal() + taxedAmount);
                     order.SetTax(order.GetTax() + taxAmount);
