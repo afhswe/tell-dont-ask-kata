@@ -1,5 +1,12 @@
-# tell don't ask kata
+# Tell Don't Ask Kata - From Anemic to Rich Domain Model
 A legacy refactor kata, focused on the violation of the [tell don't ask](https://pragprog.com/articles/tell-dont-ask) principle and the [anemic domain model](https://martinfowler.com/bliki/AnemicDomainModel.html).
+
+## Notes and Credits
+ This kata was thankfully forked from the [original version](https://github.com/rachelcarmena/tell-dont-ask-kata) created by [Rachel M. Carmena](https://github.com/rachelcarmena) and extended as follows:
+- added C# version of the code
+- added some additional business logic
+
+The following instructions and information have been taken as is from the original Kata source. 
 
 ## Instructions
 Here you find a simple order flow application. It's able to create orders, do some calculation (totals and taxes), and manage them (approval/reject and shipment).
@@ -25,4 +32,4 @@ Feedback is welcome!
 
 How did you find the kata? Did you learn anything from it?
 
-Please contact me on twitter [@racingDeveloper](https://twitter.com/racingDeveloper) or use the GitHub repo wiki!
+You can contact me here on GitHub or contact the original author via  twitter [@racingDeveloper](https://twitter.com/racingDeveloper) or using the original GitHub repo wiki!
