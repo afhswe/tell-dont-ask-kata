@@ -32,4 +32,4 @@ Feedback is welcome!
 
 How did you find the kata? Did you learn anything from it?
 
-You can contact me here on GitHub or contact the original author via  twitter [@racingDeveloper](https://twitter.com/racingDeveloper) or using the original GitHub repo wiki!
+You can [contact me](https://github.com/afhswe) or contact the original author via  twitter [@racingDeveloper](https://twitter.com/racingDeveloper) or using the original GitHub repo wiki!
