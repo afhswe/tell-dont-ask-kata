@@ -21,10 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TellDontAsk.Repository\TellDontAskKata.Repository.csproj" />
+    <ProjectReference Include="..\TellDontAskKata.Repository\TellDontAskKata.Repository.csproj" />
     <ProjectReference Include="..\TellDontAskKata.Test.Doubles\TellDontAskKata.Test.Doubles.csproj" />
     <ProjectReference Include="..\TellDontAskKata.UseCase\TellDontAskKata.UseCase.csproj" />
-    <ProjectReference Include="..\TellDontAskKata\TellDontAskKata.Domain.csproj" />
+    <ProjectReference Include="..\TellDontAskKata.Domain\TellDontAskKata.Domain.csproj" />
   </ItemGroup>
 
 </Project>

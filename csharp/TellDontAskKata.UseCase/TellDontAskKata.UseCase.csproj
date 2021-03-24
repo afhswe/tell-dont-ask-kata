@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TellDontAsk.Repository\TellDontAskKata.Repository.csproj" />
+    <ProjectReference Include="..\TellDontAskKata.Repository\TellDontAskKata.Repository.csproj" />
     <ProjectReference Include="..\TellDontAskKata.Service\TellDontAskKata.Service.csproj" />
-    <ProjectReference Include="..\TellDontAskKata\TellDontAskKata.Domain.csproj" />
+    <ProjectReference Include="..\TellDontAskKata.Domain\TellDontAskKata.Domain.csproj" />
   </ItemGroup>
 
 </Project>

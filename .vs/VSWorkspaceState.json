@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\csharp",
+    "\\csharp\\TellDonAskKataTest.UseCase",
+    "\\csharp\\TellDontAsk.Repository",
+    "\\csharp\\TellDontAskKata",
+    "\\csharp\\TellDontAskKata.Domain",
+    "\\csharp\\TellDontAskKata.Repository",
+    "\\csharp\\TellDontAskKata.Service",
+    "\\csharp\\TellDontAskKata.Test.Doubles",
+    "\\csharp\\TellDontAskKata.UseCase"
+  ],
+  "SelectedNode": "\\csharp\\TellDontAskKata.Service\\IShipmentService.cs",
+  "PreviewInSolutionExplorer": false
+}

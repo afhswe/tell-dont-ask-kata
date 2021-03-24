@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TellDonAskKata.Test.UseCase", "TellDonAskKataTest\TellDonAskKata.Test.UseCase.csproj", "{F764494E-8AF0-4E9B-AA87-B0A25C64D773}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TellDontAskKata.Test.UseCase", "TellDontAskKata.Test.UseCase\TellDontAskKata.Test.UseCase.csproj", "{F764494E-8AF0-4E9B-AA87-B0A25C64D773}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TellDontAskKata.Domain", "TellDontAskKata\TellDontAskKata.Domain.csproj", "{4E4572D7-DE8B-4E5A-A53A-56BF28BA98DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TellDontAskKata.Domain", "TellDontAskKata.Domain\TellDontAskKata.Domain.csproj", "{4E4572D7-DE8B-4E5A-A53A-56BF28BA98DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TellDontAskKata.Repository", "TellDontAsk.Repository\TellDontAskKata.Repository.csproj", "{71C0EC02-4295-4711-8C0F-E6C9A8751B8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TellDontAskKata.Repository", "TellDontAskKata.Repository\TellDontAskKata.Repository.csproj", "{71C0EC02-4295-4711-8C0F-E6C9A8751B8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TellDontAskKata.Service", "TellDontAskKata.Service\TellDontAskKata.Service.csproj", "{EBFDB568-3249-481A-A4B5-F950AFFD9BAA}"
 EndProject
