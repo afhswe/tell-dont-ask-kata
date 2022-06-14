@@ -11,6 +11,7 @@ namespace TellDontAskKata.UseCase
     {
         private readonly IOrderRepository orderRepository;
         private readonly IProductCatalog productCatalog;
+        private List<Product> _productsCache = new List<Product>();
 
         public OrderCreationUseCase(IOrderRepository orderRepository, IProductCatalog productCatalog)
         {
@@ -29,51 +30,66 @@ namespace TellDontAskKata.UseCase
             order.SetTax((decimal)0.0);
 
             int numberOfFoodItems = 0;
+            EmptyProductsCache();
 
             foreach (SellItemRequest itemRequest in request.GetRequests())
             {
-                Product product = productCatalog.GetByName(itemRequest.GetProductName());
+                var product = QueryProduct(itemRequest);
 
                 if (product == null)
                 {
                     throw new UnknownProductException();
                 }
-                else
+
+                decimal unitaryTax = Math.Round((product.GetPrice() / 100) * (product.GetCategory().GetTaxPercentage()), 2, MidpointRounding.AwayFromZero);
+                decimal unitaryTaxedAmount = Math.Round(product.GetPrice() + unitaryTax, 2, MidpointRounding.AwayFromZero);
+                decimal taxedAmount = Math.Round(unitaryTaxedAmount * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);
+                decimal taxAmount = Math.Round(unitaryTax * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);
+
+                OrderItem orderItem = new OrderItem();
+                orderItem.SetProduct(product);
+                orderItem.SetQuantity(itemRequest.GetQuantity());
+                orderItem.SetTax(taxAmount);
+                orderItem.SetTaxedAmount(taxedAmount);
+
+                MergeSameProductItems(order, orderItem);
+
+                foreach (OrderItem item in order.GetItems())
                 {
-                    decimal unitaryTax = Math.Round((product.GetPrice() / 100) * (product.GetCategory().GetTaxPercentage()), 2, MidpointRounding.AwayFromZero);
-                    decimal unitaryTaxedAmount = Math.Round(product.GetPrice() + unitaryTax, 2, MidpointRounding.AwayFromZero);
-                    decimal taxedAmount = Math.Round(unitaryTaxedAmount * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);
-                    decimal taxAmount = Math.Round(unitaryTax * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);
-
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.SetProduct(product);
-                    orderItem.SetQuantity(itemRequest.GetQuantity());
-                    orderItem.SetTax(taxAmount);
-                    orderItem.SetTaxedAmount(taxedAmount);
-
-                    MergeSameProductItems(order, orderItem);
-
-                    foreach (OrderItem item in order.GetItems())
+                    if (item.GetProduct().GetCategory().GetName().Equals("food"))
                     {
-                        if (item.GetProduct().GetCategory().GetName().Equals("food"))
-                        {
-                            numberOfFoodItems += item.GetQuantity();
-                        }
+                        numberOfFoodItems += item.GetQuantity();
                     }
-
-                    if (numberOfFoodItems > 100)
-                    {
-                        throw new MaximumNumberOfFoodItemsExceeded();
-                    }
-
-                    order.SetTotal(order.GetTotal() + taxedAmount);
-                    order.SetTax(order.GetTax() + taxAmount);
                 }
+
+                if (numberOfFoodItems > 100)
+                {
+                    throw new MaximumNumberOfFoodItemsExceeded();
+                }
+
+                order.SetTotal(order.GetTotal() + taxedAmount);
+                order.SetTax(order.GetTax() + taxAmount);
             }
 
             orderRepository.Save(order);
 
             return order;
+        }
+
+        private void EmptyProductsCache()
+        {
+            _productsCache = new List<Product>();
+        }
+
+        private Product QueryProduct(SellItemRequest itemRequest)
+        {
+            if (_productsCache.Any(p => p.GetName() == itemRequest.GetProductName()))
+            {
+                return _productsCache.First(p => p.GetName() == itemRequest.GetProductName());
+            }
+            Product product = productCatalog.GetByName(itemRequest.GetProductName());
+            _productsCache.Add(product);
+            return product;
         }
 
         private void MergeSameProductItems(Order order, OrderItem orderItem)
