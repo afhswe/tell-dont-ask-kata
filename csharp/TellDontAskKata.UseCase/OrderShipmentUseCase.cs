@@ -15,7 +15,7 @@ namespace TellDontAskKata.UseCase
             this.shipmentService = shipmentService;
         }
 
-        public void Run(OrderShipmentRequest request)
+        public Order Run(OrderShipmentRequest request)
         {
             Order order = orderRepository.GetById(request.GetOrderId());
 
@@ -33,6 +33,8 @@ namespace TellDontAskKata.UseCase
 
             order.SetStatus(OrderStatus.Shipped);
             orderRepository.Save(order);
+
+            return order;
         }
     }
 }

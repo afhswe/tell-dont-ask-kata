@@ -17,9 +17,10 @@ namespace TellDontAskKata.UseCase
             this.productCatalog = productCatalog;
         }
 
-        public void Run(SellItemsRequest request)
+        public Order Run(SellItemsRequest request)
         {
             Order order = new Order();
+            order.SetId(orderRepository.NextId());
             order.SetStatus(OrderStatus.Created);
             order.SetItems(new List<OrderItem>());
             order.SetCurrency("EUR");
@@ -54,7 +55,7 @@ namespace TellDontAskKata.UseCase
                     {
                         if (item.GetProduct().GetCategory().GetName().Equals("food"))
                         {
-                            numberOfFoodItems += item.getQuantity();
+                            numberOfFoodItems += item.GetQuantity();
                         }
                     }
 
@@ -69,6 +70,8 @@ namespace TellDontAskKata.UseCase
             }
 
             orderRepository.Save(order);
+
+            return order;
         }
     }
 }

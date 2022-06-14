@@ -25,6 +25,11 @@ namespace TellDontAskKata.Test.Doubles
             return orders.Where(o => o.GetId() == orderId).First();
         }
 
+        public int NextId()
+        {
+            return 1;
+        }
+
         public void AddOrder(Order order)
         {
             orders.Add(order);

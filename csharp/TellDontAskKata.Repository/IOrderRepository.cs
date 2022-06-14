@@ -1,4 +1,5 @@
-﻿using TellDontAskKata.Domain;
+﻿using System;
+using TellDontAskKata.Domain;
 
 namespace TellDontAsk.Repository
 {
@@ -6,6 +7,7 @@ namespace TellDontAsk.Repository
     {
         void Save(Order order);
         Order GetById(int orderId);
+        int NextId();
     }
 
 }

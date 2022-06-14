@@ -12,7 +12,7 @@ namespace TellDontAskKata.UseCase
             this.orderRepository = orderRepository;
         }
 
-        public void Run(OrderApprovalRequest request)
+        public Order Run(OrderApprovalRequest request)
         {
             Order order = orderRepository.GetById(request.GetOrderId());
 
@@ -32,10 +32,9 @@ namespace TellDontAskKata.UseCase
             }
 
             order.SetStatus(request.IsApproved() ? OrderStatus.Approved : OrderStatus.Rejected);
-            var newOrder = new Order();
-            newOrder.SetId(order.GetId());
-            newOrder.SetStatus(order.GetStatus());
-            orderRepository.Save(newOrder);
+            orderRepository.Save(order);
+
+            return order;
         }
     }
 }

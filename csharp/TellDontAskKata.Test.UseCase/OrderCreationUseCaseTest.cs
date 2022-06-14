@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using TellDontAskKata.Repository;
 
 namespace TellDonAskKataTest
 {
     public class OrderCreationUseCaseTest
     {
-        private readonly TestOrderRepository orderRepository = new TestOrderRepository();
+        private readonly Mock<IOrderRepository> orderRepository = new();
+        private readonly Mock<IProductCatalog> productCatalog = new();
         private readonly Category food;
         private readonly OrderCreationUseCase useCase;
 
@@ -29,14 +32,15 @@ namespace TellDonAskKataTest
 
             products.Add(tomato);
 
-            var productCatalog = new InMemoryProductCatalog(products);
+            productCatalog.Setup(x => x.GetByName("salad")).Returns(salad);
+            productCatalog.Setup(x => x.GetByName("tomato")).Returns(tomato);
 
-            useCase = new OrderCreationUseCase(orderRepository, productCatalog);
+            useCase = new OrderCreationUseCase(orderRepository.Object, productCatalog.Object);
         }
 
 
         [Fact]
-        public void SellMultipleItems()
+        public void CreatesOrder_WithMultipleItems()
         {
             SellItemRequest saladRequest = new SellItemRequest();
             saladRequest.SetProductName("salad");
@@ -49,28 +53,44 @@ namespace TellDonAskKataTest
             SellItemsRequest request = new SellItemsRequest();
             request.SetRequests(new List<SellItemRequest>() { saladRequest, tomatoRequest });
 
-            useCase.Run(request);
+            orderRepository.Setup(x => x.NextId()).Returns(1);
 
-            Order insertedOrder = orderRepository.GetSavedOrder();
-            insertedOrder.GetStatus().Should().Be(OrderStatus.Created);
-            insertedOrder.GetTotal().Should().Be((decimal)23.20);
-            insertedOrder.GetTax().Should().Be((decimal)2.13);
-            insertedOrder.GetCurrency().Should().Be("EUR");
-            insertedOrder.GetItems().Should().HaveCount(2);
-            insertedOrder.GetItems()[0].GetProduct().GetName().Should().Be("salad");
-            insertedOrder.GetItems()[0].GetProduct().GetPrice().Should().Be((decimal)3.56);
-            insertedOrder.GetItems()[0].getQuantity().Should().Be(2);
-            insertedOrder.GetItems()[0].GetTaxedAmount().Should().Be((decimal)7.84);
-            insertedOrder.GetItems()[0].GetTax().Should().Be((decimal)0.72);
-            insertedOrder.GetItems()[1].GetProduct().GetName().Should().Be("tomato");
-            insertedOrder.GetItems()[1].GetProduct().GetPrice().Should().Be((decimal)4.65);
-            insertedOrder.GetItems()[1].getQuantity().Should().Be(3);
-            insertedOrder.GetItems()[1].GetTaxedAmount().Should().Be((decimal)15.36);
-            insertedOrder.GetItems()[1].GetTax().Should().Be((decimal)1.41);
+            Order createdOrder = useCase.Run(request);
+            createdOrder.GetItems().Should().HaveCount(2);
+            createdOrder.GetItems().Should().Contain(item => item.GetProduct().GetName() == "salad");
+            createdOrder.GetItems().Should().Contain(item => item.GetProduct().GetName() == "tomato");
+            createdOrder.GetStatus().Should().Be(OrderStatus.Created);
+        }
+
+
+        [Fact]
+        public void CalculatesPriceIncludingTaxes_ForCreatedOrder()
+        {
+            SellItemRequest saladRequest = new SellItemRequest();
+            saladRequest.SetProductName("salad");
+            saladRequest.SetQuantity(2);
+
+            SellItemsRequest request = new SellItemsRequest();
+            request.SetRequests(new List<SellItemRequest>() { saladRequest });
+
+            orderRepository.Setup(x => x.NextId()).Returns(1);
+
+            Order createdOrder = useCase.Run(request);
+
+            var saladItemFromOrder = 
+                createdOrder.GetItems().First(item => item.GetProduct().GetName() == "salad");
+            saladItemFromOrder.GetTax().Should().Be(0.72M);
+            saladItemFromOrder.GetTaxedAmount().Should().Be(7.84M);
+            saladItemFromOrder.GetQuantity().Should().Be(2);
+
+            createdOrder.GetCurrency().Should().Be("EUR");
+            createdOrder.GetTax().Should().Be(0.72M);
+            createdOrder.GetTotal().Should().Be(7.84M);
+            createdOrder.GetStatus().Should().Be(OrderStatus.Created);
         }
 
         [Fact]
-        public void UnknownProduct()
+        public void DoesNotProcessUnknownProduct()
         {
             SellItemsRequest request = new SellItemsRequest();
             request.SetRequests(new List<SellItemRequest>());
@@ -83,12 +103,12 @@ namespace TellDonAskKataTest
         }
 
         [Fact]
-        public void maximumNumberOfFoodItemsExceededWithSingleQuantity()
+        public void MaximumNumberOfFoodItemsExceededWithSingleQuantity()
         {
             SellItemsRequest tooManyFoodItemsRequest = new SellItemsRequest();
             tooManyFoodItemsRequest.SetRequests(new List<SellItemRequest>());
 
-            for (int i = 0; i <= 100; i++)
+            for (var i = 0; i <= 100; i++)
             {
                 SellItemRequest foodItemRequest = new SellItemRequest();
                 foodItemRequest.SetProductName("salad");
@@ -118,6 +138,23 @@ namespace TellDonAskKataTest
 
             Action act = () => useCase.Run(tooManyFoodItemsRequest);
             act.Should().Throw<MaximumNumberOfFoodItemsExceeded>();
+        }
+
+        [Fact]
+        public void StoresSucessfullyCreatedOrder()
+        {
+            SellItemRequest saladRequest = new SellItemRequest();
+            saladRequest.SetProductName("salad");
+            saladRequest.SetQuantity(1);
+
+            SellItemsRequest request = new SellItemsRequest();
+            request.SetRequests(new List<SellItemRequest>() { saladRequest });
+
+            orderRepository.Setup(x => x.NextId()).Returns(1);
+
+            useCase.Run(request);
+
+            orderRepository.Verify(x => x.Save(It.Is<Order>(o => o.GetStatus() == OrderStatus.Created)), Times.Once);
         }
     }
 }

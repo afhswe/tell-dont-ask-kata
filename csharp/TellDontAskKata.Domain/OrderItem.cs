@@ -17,7 +17,7 @@
             this.product = product;
         }
 
-        public int getQuantity()
+        public int GetQuantity()
         {
             return quantity;
         }
