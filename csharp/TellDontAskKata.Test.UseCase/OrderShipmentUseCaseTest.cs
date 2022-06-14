@@ -27,7 +27,7 @@ namespace TellDonAskKataTest
             useCase.Run(request);
 
             shipmentService.Verify(x => 
-                x.Ship(It.Is<Order>(order => order.GetStatus() == OrderStatus.Approved)));
+                x.Ship(It.Is<Order>(o => o.GetId() == 1 && o.GetStatus() == OrderStatus.Approved)), Times.Once);
         }
 
         [Fact]

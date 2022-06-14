@@ -1,4 +1,6 @@
-﻿using TellDontAsk.Repository;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using TellDontAsk.Repository;
 using TellDontAskKata.Domain;
 using TellDontAskKata.Service;
 
@@ -31,8 +33,15 @@ namespace TellDontAskKata.UseCase
 
             shipmentService.Ship(order);
 
-            order.SetStatus(OrderStatus.Shipped);
-            orderRepository.Save(order);
+            var orderToStore = new Order();
+            orderToStore.SetId(order.GetId());
+            orderToStore.SetCurrency(order.GetCurrency());
+            orderToStore.SetTax(order.GetTax());
+            orderToStore.SetTotal(order.GetTotal());
+            orderToStore.SetItems(order.GetItems());
+            orderToStore.SetStatus(OrderStatus.Shipped);
+
+            orderRepository.Save(orderToStore);
 
             return order;
         }
