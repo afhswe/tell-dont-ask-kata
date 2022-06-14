@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TellDontAsk.Repository;
 using TellDontAskKata.Domain;
 using TellDontAskKata.Repository;
@@ -49,7 +50,8 @@ namespace TellDontAskKata.UseCase
                     orderItem.SetQuantity(itemRequest.GetQuantity());
                     orderItem.SetTax(taxAmount);
                     orderItem.SetTaxedAmount(taxedAmount);
-                    order.GetItems().Add(orderItem);
+
+                    MergeSameProductItems(order, orderItem);
 
                     foreach (OrderItem item in order.GetItems())
                     {
@@ -72,6 +74,21 @@ namespace TellDontAskKata.UseCase
             orderRepository.Save(order);
 
             return order;
+        }
+
+        private void MergeSameProductItems(Order order, OrderItem orderItem)
+        {
+            if (order.GetItems()
+                .Any(item => item.GetProduct().GetName() == orderItem.GetProduct().GetName()))
+            {
+                var itemToUpdate = order.GetItems().First(item =>
+                    item.GetProduct().GetName() == orderItem.GetProduct().GetName());
+                itemToUpdate.SetQuantity(itemToUpdate.GetQuantity() + orderItem.GetQuantity());
+            }
+            else
+            {
+                order.GetItems().Add(orderItem);
+            }
         }
     }
 }

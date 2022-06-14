@@ -156,6 +156,34 @@ namespace TellDonAskKataTest
 
             orderRepository.Verify(x => x.Save(It.Is<Order>(o => o.GetStatus() == OrderStatus.Created)), Times.Once);
         }
+
+        [Fact]
+        public void MergesItems_WithSameProduct_ToOneItem()
+        {
+            SellItemsRequest twoItemsWithSameProductRequest = new SellItemsRequest();
+            twoItemsWithSameProductRequest.SetRequests(new List<SellItemRequest>());
+
+            SellItemRequest foodItemRequest = new SellItemRequest();
+            foodItemRequest.SetProductName("salad");
+            foodItemRequest.SetQuantity(1);
+            twoItemsWithSameProductRequest.GetRequests().Add(foodItemRequest);
+
+            foodItemRequest = new SellItemRequest();
+            foodItemRequest.SetProductName("salad");
+            foodItemRequest.SetQuantity(1);
+            twoItemsWithSameProductRequest.GetRequests().Add(foodItemRequest);
+
+            orderRepository.Setup(x => x.NextId()).Returns(1);
+            var orderResult = useCase.Run(twoItemsWithSameProductRequest);
+            orderResult.GetItems().Should().HaveCount(1);
+            orderResult.GetItems().Should()
+                .Contain(item => item.GetProduct().GetName() == "salad" && item.GetQuantity() == 2);
+
+
+
+
+
+        }
     }
 }
 
