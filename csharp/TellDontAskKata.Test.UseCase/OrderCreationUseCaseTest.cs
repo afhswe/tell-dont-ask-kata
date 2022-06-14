@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions.Common;
 using TellDontAskKata.Repository;
 
 namespace TellDonAskKataTest
@@ -87,6 +88,8 @@ namespace TellDonAskKataTest
             createdOrder.GetTax().Should().Be(0.72M);
             createdOrder.GetTotal().Should().Be(7.84M);
             createdOrder.GetStatus().Should().Be(OrderStatus.Created);
+
+            orderRepository.Verify(x => x.Save(It.Is<Order>(order => order.GetId() == createdOrder.GetId())), Times.Once);
         }
 
         [Fact]
@@ -141,7 +144,7 @@ namespace TellDonAskKataTest
         }
 
         [Fact]
-        public void StoresSucessfullyCreatedOrder()
+        public void StoresSucessfullyCreatedOrders()
         {
             SellItemRequest saladRequest = new SellItemRequest();
             saladRequest.SetProductName("salad");
