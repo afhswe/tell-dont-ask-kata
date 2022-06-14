@@ -1,33 +1,33 @@
-﻿namespace TellDonAskKataTest
+﻿using TellDontAskKata.Service;
+
+namespace TellDonAskKataTest
 {
     public class OrderShipmentUseCaseTest
     {
-        private readonly TestOrderRepository orderRepository;
-        private readonly TestShipmentService shipmentService;
+        private readonly Mock<IOrderRepository> orderRepository = new();
+        private readonly Mock<IShipmentService> shipmentService = new();
         private readonly OrderShipmentUseCase useCase;
 
         public OrderShipmentUseCaseTest()
         {
-            orderRepository = new TestOrderRepository();
-            shipmentService = new TestShipmentService();
-            useCase = new OrderShipmentUseCase(orderRepository, shipmentService);
+            useCase = new OrderShipmentUseCase(orderRepository.Object, shipmentService.Object);
         }
 
         [Fact]
-        public void ShipApprovedOrder()
+        public void ShipsApprovedOrder()
         {
             Order initialOrder = new Order();
             initialOrder.SetId(1);
             initialOrder.SetStatus(OrderStatus.Approved);
-            orderRepository.AddOrder(initialOrder);
+            orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
             OrderShipmentRequest request = new OrderShipmentRequest();
             request.SetOrderId(1);
 
             useCase.Run(request);
 
-            orderRepository.GetSavedOrder().GetStatus().Should().Be(OrderStatus.Shipped);
-            shipmentService.GetShippedOrder().Should().Be(initialOrder);
+            shipmentService.Verify(x => 
+                x.Ship(It.Is<Order>(order => order.GetStatus() == OrderStatus.Approved)));
         }
 
         [Fact]
@@ -36,16 +36,13 @@
             Order initialOrder = new Order();
             initialOrder.SetId(1);
             initialOrder.SetStatus(OrderStatus.Created);
-            orderRepository.AddOrder(initialOrder);
+            orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
             OrderShipmentRequest request = new OrderShipmentRequest();
             request.SetOrderId(1);
 
             Action act = () => useCase.Run(request);
             act.Should().Throw<OrderCannotBeShippedException>();
-
-            orderRepository.GetSavedOrder().Should().BeNull();
-            shipmentService.GetShippedOrder().Should().BeNull();
         }
 
         [Fact]
@@ -54,16 +51,13 @@
             Order initialOrder = new Order();
             initialOrder.SetId(1);
             initialOrder.SetStatus(OrderStatus.Rejected);
-            orderRepository.AddOrder(initialOrder);
+            orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
             OrderShipmentRequest request = new OrderShipmentRequest();
             request.SetOrderId(1);
 
             Action act = () => useCase.Run(request);
             act.Should().Throw<OrderCannotBeShippedException>();
-
-            orderRepository.GetSavedOrder().Should().BeNull();
-            shipmentService.GetShippedOrder().Should().BeNull();
         }
 
         [Fact]
@@ -72,16 +66,13 @@
             Order initialOrder = new Order();
             initialOrder.SetId(1);
             initialOrder.SetStatus(OrderStatus.Shipped);
-            orderRepository.AddOrder(initialOrder);
+            orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
             OrderShipmentRequest request = new OrderShipmentRequest();
             request.SetOrderId(1);
 
             Action act = () => useCase.Run(request);
             act.Should().Throw<OrderCannotBeShippedTwiceException>();
-
-            orderRepository.GetSavedOrder().Should().BeNull();
-            shipmentService.GetShippedOrder().Should().BeNull();
         }
     }
 }
