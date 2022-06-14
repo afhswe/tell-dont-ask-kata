@@ -1,11 +1,4 @@
-﻿using FluentAssertions;
-using System;
-using TellDontAskKata.Domain;
-using TellDontAskKata.Test.Doubles;
-using TellDontAskKata.UseCase;
-using Xunit;
-
-namespace TellDonAskKataTest
+﻿namespace TellDonAskKataTest
 {
     public class OrderShipmentUseCaseTest
     {

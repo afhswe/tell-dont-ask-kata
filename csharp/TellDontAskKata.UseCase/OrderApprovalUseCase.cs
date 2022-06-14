@@ -32,7 +32,10 @@ namespace TellDontAskKata.UseCase
             }
 
             order.SetStatus(request.IsApproved() ? OrderStatus.Approved : OrderStatus.Rejected);
-            orderRepository.Save(order);
+            var newOrder = new Order();
+            newOrder.SetId(order.GetId());
+            newOrder.SetStatus(order.GetStatus());
+            orderRepository.Save(newOrder);
         }
     }
 }

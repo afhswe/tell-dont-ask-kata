@@ -1,130 +1,115 @@
-using FluentAssertions;
-using System;
-using TellDontAskKata.Domain;
-using TellDontAskKata.Test.Doubles;
-using TellDontAskKata.UseCase;
-using Xunit;
+namespace TellDonAskKataTest;
 
-namespace TellDonAskKataTest
+public class OrderApprovalUseCaseTest
 {
-    public class OrderApprovalUseCaseTest
+    private readonly Mock<IOrderRepository> orderRepository;
+    private readonly OrderApprovalUseCase useCase;
+
+    public OrderApprovalUseCaseTest()
     {
-        private readonly TestOrderRepository orderRepository;
-        private readonly OrderApprovalUseCase useCase;
+        orderRepository = new Mock<IOrderRepository>();
+        useCase = new OrderApprovalUseCase(orderRepository.Object);
+    }
 
-        public OrderApprovalUseCaseTest()
-        {
-            orderRepository = new TestOrderRepository();
-            useCase = new OrderApprovalUseCase(orderRepository);
-        }
+    [Fact]
+    public void StoresApprovedOrder()
+    {
+        Order initialOrder = new Order();
+        initialOrder.SetStatus(OrderStatus.Created);
+        initialOrder.SetId(1);
+        orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
-        [Fact]
-        public void ApprovedExistingOrder()
-        {
-            Order initialOrder = new Order();
-            initialOrder.SetStatus(OrderStatus.Created);
-            initialOrder.SetId(1);
-            orderRepository.AddOrder(initialOrder);
+        OrderApprovalRequest request = new OrderApprovalRequest();
+        request.SetOrderId(1);
+        request.SetApproved(true);
 
-            OrderApprovalRequest request = new OrderApprovalRequest();
-            request.SetOrderId(1);
-            request.SetApproved(true);
+        useCase.Run(request);
 
-            useCase.Run(request);
+        orderRepository.Verify(x =>
+            x.Save(It.Is<Order>(o => o.GetStatus() == OrderStatus.Approved && o.GetId() == 1)), Times.Once);
+    }
 
-            Order savedOrder = orderRepository.GetSavedOrder();
-            savedOrder.GetStatus().Should().Be(OrderStatus.Approved);
-        }
+    [Fact]
+    public void RejectsExistingOrder()
+    {
+        Order initialOrder = new Order();
+        initialOrder.SetStatus(OrderStatus.Created);
+        initialOrder.SetId(1);
+        orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
-        [Fact]
-        public void RejectedExistingOrder()
-        {
-            Order initialOrder = new Order();
-            initialOrder.SetStatus(OrderStatus.Created);
-            initialOrder.SetId(1);
-            orderRepository.AddOrder(initialOrder);
+        OrderApprovalRequest request = new OrderApprovalRequest();
+        request.SetOrderId(1);
+        request.SetApproved(false);
 
-            OrderApprovalRequest request = new OrderApprovalRequest();
-            request.SetOrderId(1);
-            request.SetApproved(false);
+        useCase.Run(request);
 
-            useCase.Run(request);
+        orderRepository.Verify(x =>
+            x.Save(It.Is<Order>(o => o.GetStatus() == OrderStatus.Rejected && o.GetId() == 1)), Times.Once);
+    }
 
-            Order savedOrder = orderRepository.GetSavedOrder();
-            savedOrder.GetStatus().Should().Be(OrderStatus.Rejected);
-        }
+    [Fact]
+    public void CannotApproveRejectedOrder()
+    {
+        Order initialOrder = new Order();
+        initialOrder.SetStatus(OrderStatus.Rejected);
+        initialOrder.SetId(1);
+        orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
-        [Fact]
-        public void CannotApproveRejectedOrder()
-        {
-            Order initialOrder = new Order();
-            initialOrder.SetStatus(OrderStatus.Rejected);
-            initialOrder.SetId(1);
-            orderRepository.AddOrder(initialOrder);
+        OrderApprovalRequest request = new OrderApprovalRequest();
+        request.SetOrderId(1);
+        request.SetApproved(true);
 
-            OrderApprovalRequest request = new OrderApprovalRequest();
-            request.SetOrderId(1);
-            request.SetApproved(true);
+        Action act = () => useCase.Run(request);
+        act.Should().Throw<RejectedOrderCannotBeApprovedException>();
+    }
 
-            Action act = () => useCase.Run(request);
-            act.Should().Throw<RejectedOrderCannotBeApprovedException>();
+    [Fact]
+    public void CannotRejectApprovedOrder()
+    {
+        Order initialOrder = new Order();
+        initialOrder.SetStatus(OrderStatus.Approved);
+        initialOrder.SetId(1);
+        orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
-            orderRepository.GetSavedOrder().Should().BeNull();
-        }
+        OrderApprovalRequest request = new OrderApprovalRequest();
+        request.SetOrderId(1);
+        request.SetApproved(false);
 
-        [Fact]
-        public void CannotRejectApprovedOrder()
-        {
-            Order initialOrder = new Order();
-            initialOrder.SetStatus(OrderStatus.Approved);
-            initialOrder.SetId(1);
-            orderRepository.AddOrder(initialOrder);
+        Action act = () => useCase.Run(request);
+        act.Should().Throw<ApprovedOrderCannotBeRejectedException>();
+    }
 
-            OrderApprovalRequest request = new OrderApprovalRequest();
-            request.SetOrderId(1);
-            request.SetApproved(false);
+    [Fact]
+    public void ShippedOrdersCannotBeApproved()
+    {
+        Order initialOrder = new Order();
+        initialOrder.SetStatus(OrderStatus.Shipped);
+        initialOrder.SetId(1);
+        orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
-            Action act = () => useCase.Run(request);
-            act.Should().Throw<ApprovedOrderCannotBeRejectedException>();
+        OrderApprovalRequest request = new OrderApprovalRequest();
+        request.SetOrderId(1);
+        request.SetApproved(true);
 
-            orderRepository.GetSavedOrder().Should().BeNull();
-        }
+        Action act = () => useCase.Run(request);
 
-        [Fact]
-        public void ShippedOrdersCannotBeApproved()
-        {
-            Order initialOrder = new Order();
-            initialOrder.SetStatus(OrderStatus.Shipped);
-            initialOrder.SetId(1);
-            orderRepository.AddOrder(initialOrder);
+        act.Should().Throw<ShippedOrdersCannotBeChangedException>();
+    }
 
-            OrderApprovalRequest request = new OrderApprovalRequest();
-            request.SetOrderId(1);
-            request.SetApproved(true);
+    [Fact]
+    public void ShippedOrdersCannotBeRejected()
+    {
+        Order initialOrder = new Order();
+        initialOrder.SetStatus(OrderStatus.Shipped);
+        initialOrder.SetId(1);
+        orderRepository.Setup(x => x.GetById(1)).Returns(initialOrder);
 
-            Action act = () => useCase.Run(request);
+        OrderApprovalRequest request = new OrderApprovalRequest();
+        request.SetOrderId(1);
+        request.SetApproved(false);
 
-            act.Should().Throw<ShippedOrdersCannotBeChangedException>();
-            orderRepository.GetSavedOrder().Should().BeNull();
-        }
+        Action act = () => useCase.Run(request);
 
-        [Fact]
-        public void ShippedOrdersCannotBeRejected()
-        {
-            Order initialOrder = new Order();
-            initialOrder.SetStatus(OrderStatus.Shipped);
-            initialOrder.SetId(1);
-            orderRepository.AddOrder(initialOrder);
-
-            OrderApprovalRequest request = new OrderApprovalRequest();
-            request.SetOrderId(1);
-            request.SetApproved(false);
-
-            Action act = () => useCase.Run(request);
-
-            act.Should().Throw<ShippedOrdersCannotBeChangedException>();
-            orderRepository.GetSavedOrder().Should().BeNull();
-        }
+        act.Should().Throw<ShippedOrdersCannotBeChangedException>();
     }
 }
-

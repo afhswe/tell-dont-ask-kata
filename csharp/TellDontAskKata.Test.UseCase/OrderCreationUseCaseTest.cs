@@ -1,10 +1,4 @@
-﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using TellDontAskKata.Domain;
-using TellDontAskKata.Test.Doubles;
-using TellDontAskKata.UseCase;
-using Xunit;
+﻿using System.Collections.Generic;
 
 namespace TellDonAskKataTest
 {
