@@ -18,7 +18,7 @@ namespace TellDontAskKata.UseCase
             this.productCatalog = productCatalog;
         }
 
-        public Order Run(SellItemsRequest request)
+        public Order Run(ISellItemsRequest request)
         {
             Order order = new Order();
             order.SetId(orderRepository.NextId());
@@ -29,6 +29,8 @@ namespace TellDontAskKata.UseCase
             order.SetTax((decimal)0.0);
 
             int numberOfFoodItems = 0;
+
+            request.MergeItemRequestsOfSameProduct();
 
             foreach (SellItemRequest itemRequest in request.GetRequests())
             {
