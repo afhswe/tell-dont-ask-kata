@@ -179,10 +179,7 @@ namespace TellDonAskKataTest
             orderResult.GetItems().Should()
                 .Contain(item => item.GetProduct().GetName() == "salad" && item.GetQuantity() == 2);
 
-
-
-
-
+            productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(2));
         }
     }
 }
