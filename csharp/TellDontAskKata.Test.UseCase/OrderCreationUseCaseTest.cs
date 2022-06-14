@@ -178,11 +178,12 @@ namespace TellDonAskKataTest
 
             orderRepository.Setup(x => x.NextId()).Returns(1);
             var orderResult = useCase.Run(twoItemsWithSameProductRequest);
+
             orderResult.GetItems().Should().HaveCount(1);
             orderResult.GetItems().Should()
                 .Contain(item => item.GetProduct().GetName() == "salad" && item.GetQuantity() == 2);
 
-            productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(2));
+            productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(1));
         }
     }
 }
