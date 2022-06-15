@@ -7,6 +7,8 @@ namespace TellDontAskKata.UseCase
     public class SellItemsRequest : ISellItemsRequest
     {
         private List<SellItemRequest> requests;
+        private List<SellItemRequest> mergedRequests;
+
         public void SetRequests(List<SellItemRequest> requests)
         {
             this.requests = requests;
@@ -19,12 +21,12 @@ namespace TellDontAskKata.UseCase
 
         public void MergeItemRequestsOfSameProduct()
         {
-            /*var mergedList = new List<SellItemRequest>();
+            mergedRequests = new List<SellItemRequest>();
             foreach (SellItemRequest request in requests)
             {
-                if (mergedList.Any(r => r.GetProductName() == request.GetProductName()))
+                if (mergedRequests.Any(r => r.GetProductName() == request.GetProductName()))
                 {
-                    var current = mergedList.First(rq => rq.GetProductName() == request.GetProductName());
+                    var current = mergedRequests.First(rq => rq.GetProductName() == request.GetProductName());
                     current.SetQuantity(current.GetQuantity() + request.GetQuantity());
                 }
                 else
@@ -32,11 +34,14 @@ namespace TellDontAskKata.UseCase
                     var requestCopy = new SellItemRequest();
                     requestCopy.SetProductName(request.GetProductName());
                     requestCopy.SetQuantity(request.GetQuantity());
-                    mergedList.Add(requestCopy);
+                    mergedRequests.Add(requestCopy);
                 }
             }
+        }
 
-            this.requests = mergedList;*/
+        public List<SellItemRequest> GetMergedRequests()
+        {
+            return mergedRequests;
         }
     }
 }

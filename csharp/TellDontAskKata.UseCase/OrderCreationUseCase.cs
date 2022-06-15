@@ -30,9 +30,14 @@ namespace TellDontAskKata.UseCase
 
             int numberOfFoodItems = 0;
 
-            request.MergeItemRequestsOfSameProduct();
+            var requestItems = request.GetRequests();
+            if (requestItems.Count > requestItems.GroupBy(item => item.GetProductName()).ToList().Count)
+            {
+                request.MergeItemRequestsOfSameProduct();
+                requestItems = request.GetMergedRequests();
+            }
 
-            foreach (SellItemRequest itemRequest in request.GetRequests())
+            foreach (SellItemRequest itemRequest in requestItems)
             {
                 Product product = productCatalog.GetByName(itemRequest.GetProductName());
 
@@ -53,7 +58,7 @@ namespace TellDontAskKata.UseCase
                     orderItem.SetTax(taxAmount);
                     orderItem.SetTaxedAmount(taxedAmount);
 
-                    MergeSameProductItems(order, orderItem);
+                    order.GetItems().Add(orderItem);
 
                     foreach (OrderItem item in order.GetItems())
                     {
@@ -76,21 +81,6 @@ namespace TellDontAskKata.UseCase
             orderRepository.Save(order);
 
             return order;
-        }
-
-        private void MergeSameProductItems(Order order, OrderItem orderItem)
-        {
-            if (order.GetItems()
-                .Any(item => item.GetProduct().GetName() == orderItem.GetProduct().GetName()))
-            {
-                var itemToUpdate = order.GetItems().First(item =>
-                    item.GetProduct().GetName() == orderItem.GetProduct().GetName());
-                itemToUpdate.SetQuantity(itemToUpdate.GetQuantity() + orderItem.GetQuantity());
-            }
-            else
-            {
-                order.GetItems().Add(orderItem);
-            }
         }
     }
 }

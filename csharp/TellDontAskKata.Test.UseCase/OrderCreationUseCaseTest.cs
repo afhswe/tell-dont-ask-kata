@@ -175,7 +175,16 @@ namespace TellDonAskKataTest
             foodItemRequest.SetProductName("salad");
             foodItemRequest.SetQuantity(1);
             itemRequests.Add(foodItemRequest);
+
             twoItemsWithSameProductRequest.Setup(x => x.GetRequests()).Returns(itemRequests);
+
+            var mergedFoodItemRequest = new SellItemRequest();
+            mergedFoodItemRequest.SetProductName("salad");
+            mergedFoodItemRequest.SetQuantity(2);
+            twoItemsWithSameProductRequest.Setup(x => x.GetMergedRequests()).Returns(new List<SellItemRequest>()
+            {
+                mergedFoodItemRequest
+            });
 
             orderRepository.Setup(x => x.NextId()).Returns(1);
             var orderResult = useCase.Run(twoItemsWithSameProductRequest.Object);
@@ -184,7 +193,7 @@ namespace TellDonAskKataTest
             orderResult.GetItems().Should()
                 .Contain(item => item.GetProduct().GetName() == "salad" && item.GetQuantity() == 2);
 
-            productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(2));
+            productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(1));
             twoItemsWithSameProductRequest.Verify(x => x.MergeItemRequestsOfSameProduct(), Times.Once);
 
         }

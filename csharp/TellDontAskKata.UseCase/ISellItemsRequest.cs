@@ -7,5 +7,6 @@ namespace TellDontAskKata.UseCase
         void SetRequests(List<SellItemRequest> requests);
         List<SellItemRequest> GetRequests();
         void MergeItemRequestsOfSameProduct();
+        List<SellItemRequest> GetMergedRequests();
     }
 }
