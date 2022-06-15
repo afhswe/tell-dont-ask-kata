@@ -194,32 +194,6 @@ namespace TellDonAskKataTest
             productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(1));
             twoItemsWithSameProductRequest.Verify(x => x.MergeItemRequestsOfSameProduct(), Times.Once);
         }
-
-        [Fact]
-        public void MergesItems_WithSameProduct_ToOneItem_GoodSolution()
-        {
-            var twoItemsWithSameProductRequest = new SellItemsRequest();
-            var itemRequests = new List<SellItemRequest>();
-
-            SellItemRequest foodItemRequest = new SellItemRequest();
-            foodItemRequest.SetProductName("salad");
-            foodItemRequest.SetQuantity(1);
-            itemRequests.Add(foodItemRequest);
-
-            foodItemRequest = new SellItemRequest();
-            foodItemRequest.SetProductName("salad");
-            foodItemRequest.SetQuantity(1);
-            itemRequests.Add(foodItemRequest);
-
-            twoItemsWithSameProductRequest.SetRequests(itemRequests);
-
-            orderRepository.Setup(x => x.NextId()).Returns(1);
-            var orderResult = useCase.Run(twoItemsWithSameProductRequest);
-
-            orderResult.GetItems().Should().HaveCount(1);
-            orderResult.GetItems().Should()
-                .Contain(item => item.GetProduct().GetName() == "salad" && item.GetQuantity() == 2);
-        }
     }
 }
 
