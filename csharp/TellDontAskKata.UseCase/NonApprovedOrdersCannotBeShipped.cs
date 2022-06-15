@@ -2,7 +2,7 @@
 
 namespace TellDontAskKata.UseCase
 {
-    public class OrderCannotBeShippedException : Exception
+    public class NonApprovedOrdersCannotBeShipped : Exception
     {
     }
 }

@@ -1,17 +1,11 @@
-﻿namespace TellDontAskKata.UseCase
+﻿using System;
+
+namespace TellDontAskKata.UseCase
 {
     public class OrderShipmentRequest
     {
-        private int orderId;
+        public int OrderId { get; set; }
+        public DateTime OrderCreatedAt { get; set; }
 
-        public void SetOrderId(int orderId)
-        {
-            this.orderId = orderId;
-        }
-
-        public int GetOrderId()
-        {
-            return orderId;
-        }
     }
 }
