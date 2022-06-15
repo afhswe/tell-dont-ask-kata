@@ -100,6 +100,7 @@ namespace TellDonAskKataTest
             SellItemRequest unknownProductRequest = new SellItemRequest();
             unknownProductRequest.SetProductName("unknown product");
             request.SetRequests(new List<SellItemRequest>() { unknownProductRequest });
+            productCatalog.Setup(x => x.GetByName("unknown product")).Returns((Product) null);
 
             Action act = () => useCase.Run(request);
             act.Should().Throw<UnknownProductException>();

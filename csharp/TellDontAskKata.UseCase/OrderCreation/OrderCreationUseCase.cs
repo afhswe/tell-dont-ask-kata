@@ -11,6 +11,7 @@ namespace TellDontAskKata.UseCase.OrderCreation
     {
         private readonly IOrderRepository orderRepository;
         private readonly IProductCatalog productCatalog;
+        private List<Product> cachedProducts = new List<Product>();
 
         public OrderCreationUseCase(IOrderRepository orderRepository, IProductCatalog productCatalog)
         {
@@ -36,6 +37,8 @@ namespace TellDontAskKata.UseCase.OrderCreation
                 request.MergeItemRequestsOfSameProduct();
                 requestItems = request.GetMergedRequests();
             }
+
+            cachedProducts = new List<Product>();
 
             foreach (SellItemRequest itemRequest in requestItems)
             {
