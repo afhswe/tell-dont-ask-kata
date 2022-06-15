@@ -96,10 +96,9 @@ namespace TellDonAskKataTest
         public void DoesNotProcessUnknownProduct()
         {
             ISellItemsRequest request = new SellItemsRequest();
-            request.SetRequests(new List<SellItemRequest>());
             SellItemRequest unknownProductRequest = new SellItemRequest();
             unknownProductRequest.SetProductName("unknown product");
-            request.GetRequests().Add(unknownProductRequest);
+            request.SetRequests(new List<SellItemRequest>() { unknownProductRequest });
 
             Action act = () => useCase.Run(request);
             act.Should().Throw<UnknownProductException>();
@@ -109,15 +108,16 @@ namespace TellDonAskKataTest
         public void MaximumNumberOfFoodItemsExceededWithSingleQuantity()
         {
             ISellItemsRequest tooManyFoodItemsRequest = new SellItemsRequest();
-            tooManyFoodItemsRequest.SetRequests(new List<SellItemRequest>());
+            var sellItemRequests = new List<SellItemRequest>();
 
             for (var i = 0; i <= 100; i++)
             {
                 SellItemRequest foodItemRequest = new SellItemRequest();
                 foodItemRequest.SetProductName("salad");
                 foodItemRequest.SetQuantity(1);
-                tooManyFoodItemsRequest.GetRequests().Add(foodItemRequest);
+                sellItemRequests.Add(foodItemRequest);
             }
+            tooManyFoodItemsRequest.SetRequests(sellItemRequests);
 
             Action act = () => useCase.Run(tooManyFoodItemsRequest);
             act.Should().Throw<MaximumNumberOfFoodItemsExceeded>();
@@ -127,18 +127,16 @@ namespace TellDonAskKataTest
         public void MaximumNumberOfFoodItemsExceededWithMultipleQuantity()
         {
             ISellItemsRequest tooManyFoodItemsRequest = new SellItemsRequest();
-            tooManyFoodItemsRequest.SetRequests(new List<SellItemRequest>());
 
-            SellItemRequest foodItemRequest = new SellItemRequest();
-            foodItemRequest.SetProductName("salad");
-            foodItemRequest.SetQuantity(30);
-            tooManyFoodItemsRequest.GetRequests().Add(foodItemRequest);
+            SellItemRequest firstSaladItem = new SellItemRequest();
+            firstSaladItem.SetProductName("salad");
+            firstSaladItem.SetQuantity(30);
 
-            foodItemRequest = new SellItemRequest();
-            foodItemRequest.SetProductName("tomato");
-            foodItemRequest.SetQuantity(71);
-            tooManyFoodItemsRequest.GetRequests().Add(foodItemRequest);
+            SellItemRequest secondSaladItem = new SellItemRequest();
+            secondSaladItem.SetProductName("tomato");
+            secondSaladItem.SetQuantity(71);
 
+            tooManyFoodItemsRequest.SetRequests(new List<SellItemRequest>() { firstSaladItem, secondSaladItem, });
             Action act = () => useCase.Run(tooManyFoodItemsRequest);
             act.Should().Throw<MaximumNumberOfFoodItemsExceeded>();
         }
@@ -195,7 +193,32 @@ namespace TellDonAskKataTest
 
             productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(1));
             twoItemsWithSameProductRequest.Verify(x => x.MergeItemRequestsOfSameProduct(), Times.Once);
+        }
 
+        [Fact]
+        public void MergesItems_WithSameProduct_ToOneItem_GoodSolution()
+        {
+            var twoItemsWithSameProductRequest = new SellItemsRequest();
+            var itemRequests = new List<SellItemRequest>();
+
+            SellItemRequest foodItemRequest = new SellItemRequest();
+            foodItemRequest.SetProductName("salad");
+            foodItemRequest.SetQuantity(1);
+            itemRequests.Add(foodItemRequest);
+
+            foodItemRequest = new SellItemRequest();
+            foodItemRequest.SetProductName("salad");
+            foodItemRequest.SetQuantity(1);
+            itemRequests.Add(foodItemRequest);
+
+            twoItemsWithSameProductRequest.SetRequests(itemRequests);
+
+            orderRepository.Setup(x => x.NextId()).Returns(1);
+            var orderResult = useCase.Run(twoItemsWithSameProductRequest);
+
+            orderResult.GetItems().Should().HaveCount(1);
+            orderResult.GetItems().Should()
+                .Contain(item => item.GetProduct().GetName() == "salad" && item.GetQuantity() == 2);
         }
     }
 }
