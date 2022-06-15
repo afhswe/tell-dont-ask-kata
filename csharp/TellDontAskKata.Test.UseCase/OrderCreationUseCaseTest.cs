@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions.Common;
 using TellDontAskKata.Repository;
+using TellDontAskKata.UseCase.OrderCreation;
 
 namespace TellDonAskKataTest
 {

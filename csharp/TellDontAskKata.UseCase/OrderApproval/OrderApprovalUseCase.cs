@@ -1,7 +1,7 @@
 ﻿using TellDontAsk.Repository;
 using TellDontAskKata.Domain;
 
-namespace TellDontAskKata.UseCase
+namespace TellDontAskKata.UseCase.OrderApproval
 {
     public class OrderApprovalUseCase
     {

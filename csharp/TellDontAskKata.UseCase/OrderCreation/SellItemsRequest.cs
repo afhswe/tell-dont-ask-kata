@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace TellDontAskKata.UseCase
+namespace TellDontAskKata.UseCase.OrderCreation
 {
 
     public class SellItemsRequest : ISellItemsRequest

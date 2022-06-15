@@ -1,10 +1,9 @@
 ﻿using System;
-using TellDonAskKataTest;
 using TellDontAsk.Repository;
 using TellDontAskKata.Domain;
 using TellDontAskKata.Service;
 
-namespace TellDontAskKata.UseCase
+namespace TellDontAskKata.UseCase.OrderShipment
 {
     public class OrderShipmentUseCase
     {

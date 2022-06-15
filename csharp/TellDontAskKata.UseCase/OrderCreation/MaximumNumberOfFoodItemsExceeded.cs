@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TellDontAskKata.UseCase
+namespace TellDontAskKata.UseCase.OrderCreation
 {
     public class MaximumNumberOfFoodItemsExceeded : Exception
     {

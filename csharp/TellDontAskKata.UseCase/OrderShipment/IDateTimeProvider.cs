@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TellDonAskKataTest;
+namespace TellDontAskKata.UseCase.OrderShipment;
 
 public interface IDateTimeProvider
 {

@@ -5,7 +5,7 @@ using TellDontAsk.Repository;
 using TellDontAskKata.Domain;
 using TellDontAskKata.Repository;
 
-namespace TellDontAskKata.UseCase
+namespace TellDontAskKata.UseCase.OrderCreation
 {
     public class OrderCreationUseCase
     {
@@ -47,7 +47,7 @@ namespace TellDontAskKata.UseCase
                 }
                 else
                 {
-                    decimal unitaryTax = Math.Round((product.GetPrice() / 100) * (product.GetCategory().GetTaxPercentage()), 2, MidpointRounding.AwayFromZero);
+                    decimal unitaryTax = Math.Round(product.GetPrice() / 100 * product.GetCategory().GetTaxPercentage(), 2, MidpointRounding.AwayFromZero);
                     decimal unitaryTaxedAmount = Math.Round(product.GetPrice() + unitaryTax, 2, MidpointRounding.AwayFromZero);
                     decimal taxedAmount = Math.Round(unitaryTaxedAmount * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);
                     decimal taxAmount = Math.Round(unitaryTax * itemRequest.GetQuantity(), 2, MidpointRounding.AwayFromZero);

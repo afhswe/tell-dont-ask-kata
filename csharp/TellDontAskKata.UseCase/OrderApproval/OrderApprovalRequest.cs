@@ -1,4 +1,4 @@
-﻿namespace TellDontAskKata.UseCase
+﻿namespace TellDontAskKata.UseCase.OrderApproval
 {
     public class OrderApprovalRequest
     {

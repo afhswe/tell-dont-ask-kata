@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TellDontAskKata.UseCase
+namespace TellDontAskKata.UseCase.OrderCreation
 {
     public interface ISellItemsRequest
     {

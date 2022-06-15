@@ -1,4 +1,5 @@
 ﻿using TellDontAskKata.Service;
+using TellDontAskKata.UseCase.OrderShipment;
 
 namespace TellDonAskKataTest
 {

@@ -1,3 +1,5 @@
+using TellDontAskKata.UseCase.OrderApproval;
+
 namespace TellDonAskKataTest;
 
 public class OrderApprovalUseCaseTest

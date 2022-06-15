@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TellDontAskKata.UseCase
+namespace TellDontAskKata.UseCase.OrderShipment
 {
     public class NonApprovedOrdersCannotBeShipped : Exception
     {
