@@ -32,8 +32,6 @@ namespace TellDontAskKata.UseCase
             int numberOfFoodItems = 0;
             EmptyProductsCache();
 
-            request.MergeItemRequestsOfSameProduct();
-
             foreach (SellItemRequest itemRequest in request.GetRequests())
             {
                 var product = QueryProduct(itemRequest);

@@ -161,20 +161,23 @@ namespace TellDonAskKataTest
         }
 
         [Fact]
-        public void MergesItems_WithSameProduct_ToOneItem()
+
+        public void MergesItems_WithSameProduct_ToOneItem_GoodSolution()
         {
-            SellItemsRequest twoItemsWithSameProductRequest = new SellItemsRequest();
-            twoItemsWithSameProductRequest.SetRequests(new List<SellItemRequest>());
+            var twoItemsWithSameProductRequest = new SellItemsRequest();
+            var itemRequests = new List<SellItemRequest>();
 
-            SellItemRequest foodItemRequest = new SellItemRequest();
-            foodItemRequest.SetProductName("salad");
-            foodItemRequest.SetQuantity(1);
-            twoItemsWithSameProductRequest.GetRequests().Add(foodItemRequest);
+            SellItemRequest firstSaladItem = new SellItemRequest();
+            firstSaladItem.SetProductName("salad");
+            firstSaladItem.SetQuantity(1);
+            itemRequests.Add(firstSaladItem);
 
-            foodItemRequest = new SellItemRequest();
-            foodItemRequest.SetProductName("salad");
-            foodItemRequest.SetQuantity(1);
-            twoItemsWithSameProductRequest.GetRequests().Add(foodItemRequest);
+            var secondSaladItem = new SellItemRequest();
+            secondSaladItem.SetProductName("salad");
+            secondSaladItem.SetQuantity(1);
+            itemRequests.Add(secondSaladItem);
+
+            twoItemsWithSameProductRequest.SetRequests(itemRequests);
 
             orderRepository.Setup(x => x.NextId()).Returns(1);
             var orderResult = useCase.Run(twoItemsWithSameProductRequest);
@@ -182,8 +185,6 @@ namespace TellDonAskKataTest
             orderResult.GetItems().Should().HaveCount(1);
             orderResult.GetItems().Should()
                 .Contain(item => item.GetProduct().GetName() == "salad" && item.GetQuantity() == 2);
-
-            productCatalog.Verify(x => x.GetByName("salad"), Times.Exactly(1));
         }
     }
 }
